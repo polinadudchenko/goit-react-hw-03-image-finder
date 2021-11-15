@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {StyledApp} from './App.styled';
 import ImageGallery from './components/ImageGallery';
 import Searchbar from './components/Searchbar';
+import '../node_modules/react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 
 class App extends Component {
 

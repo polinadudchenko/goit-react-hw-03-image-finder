@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types'
 import { Component } from 'react'
+import Loader from '../Loader'
 import fetchImage from '../../sevicies/fetch-api'
 import ImageGalleryItem from '../ImageGalleryItem'
 import { StyledGallery } from './ImageGallery.styled'
 import mapper from '../../sevicies/mapper'
+
 
 const Status = {
   IDLE: 'idle',
@@ -19,6 +21,7 @@ class ImageGallery extends Component {
 
   state = {
     images: null,
+    error: null,
     status: Status.IDLE,
   }
 
@@ -27,19 +30,37 @@ class ImageGallery extends Component {
     const nextQuery = this.props.query;
 
     if (prevQuery !== nextQuery) {
+      this.setState({ status: Status.PENDING })
       fetchImage(nextQuery).then(response => {
         const images = mapper(response.hits);
-        this.setState({images})
-      }).then(console.log(this.state.images))
+        this.setState({images, status: Status.RESOLVED})
+      }).catch(error => {
+        this.setState({ error, status: Status.REJECTED })
+        console.log(error)
+      })
+      
     }
     
   }
     
   render() {
-    const { images } = this.state;
-    return images && <StyledGallery>
+    const { images, error, status } = this.state;
+    
+    if (status === "idle") {
+      return <div>No photos loaded, please type a search query</div>
+    }
+
+    if (status === "pending") {
+      return (
+      <Loader />
+    );
+    }
+    if (status === "resolved") {
+      return images && <StyledGallery>
         <ImageGalleryItem images={images} />
       </StyledGallery>
+    }
+      
   }
   
 }
