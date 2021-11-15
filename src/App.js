@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import {StyledApp} from './App.styled';
+import ImageGallery from './components/ImageGallery';
 import Searchbar from './components/Searchbar';
 
 class App extends Component {
 
   state = {
-    image: null,
-    status: 'idle',
+    query: '',
   }
 
   handleSubmit = (input) => {
-    this.setState({image: input})
+    this.setState({query: input})
   }
 
-  render(){
+  render() {
+    const { query } = this.state;
     return <StyledApp>
-      <Searchbar onSubmit={ this.handleSubmit}/>
+      <Searchbar onSubmit={this.handleSubmit} />
+      <ImageGallery query={ query }/>
     </StyledApp>
   }
 }
