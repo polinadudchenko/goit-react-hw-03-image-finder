@@ -2,7 +2,8 @@ import PropTypes from 'prop-types'
 import { Component } from 'react'
 import fetchImage from '../../sevicies/fetch-api'
 import ImageGalleryItem from '../ImageGalleryItem'
-import {StyledGallery} from './ImageGallery.styled'
+import { StyledGallery } from './ImageGallery.styled'
+import mapper from '../../sevicies/mapper'
 
 const Status = {
   IDLE: 'idle',
@@ -26,7 +27,8 @@ class ImageGallery extends Component {
     const nextQuery = this.props.query;
 
     if (prevQuery !== nextQuery) {
-      fetchImage(nextQuery).then(images => {
+      fetchImage(nextQuery).then(response => {
+        const images = mapper(response.hits);
         this.setState({images})
       }).then(console.log(this.state.images))
     }
@@ -36,7 +38,7 @@ class ImageGallery extends Component {
   render() {
     const { images } = this.state;
     return images && <StyledGallery>
-        <ImageGalleryItem images={images.hits} />
+        <ImageGalleryItem images={images} />
       </StyledGallery>
   }
   
