@@ -14,8 +14,8 @@ const StyledOverlay = styled.div`
 `;
 
 const StyledModal = styled.div`
-  max-width: calc(100vw - 48px);
-  max-height: calc(100vh - 24px);
+  max-width: calc(100vw - 192px);
+  max-height: calc(100vh - 96px);
 `;
 
 export {StyledOverlay, StyledModal}

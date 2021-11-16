@@ -48,9 +48,9 @@ class ImageGallery extends Component {
   }
   
   handleModal = (e) => {
-    console.log('aaa');
-    this.props.onOpenModal(e.target.dataset.modal);
-    this.props.onToggleModal();
+    const { onOpenModal, onToggleModal } = this.props;
+    onOpenModal(e.target.dataset.modal);
+    onToggleModal();
   }
 
   render() {

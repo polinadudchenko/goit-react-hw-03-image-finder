@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyledApp} from './App.styled';
+import {StyledApp, StyledModalImg} from './App.styled';
 import ImageGallery from './components/ImageGallery';
 import Searchbar from './components/Searchbar';
 import '../node_modules/react-loader-spinner/dist/loader/css/react-spinner-loader.css'
@@ -32,7 +32,7 @@ class App extends Component {
     return <StyledApp>
       <Searchbar onSubmit={this.handleSubmit} />
       <ImageGallery query={query} onToggleModal={this.toggleModal} onOpenModal={this.openModal }/>
-      {showModal && <Modal onClose={this.toggleModal}><h1>Title</h1><img src={modalImg} alt={ query}/></Modal>}
+      {showModal && <Modal onClose={this.toggleModal}><StyledModalImg src={modalImg} alt={ query}/></Modal>}
     </StyledApp>
   }
 }

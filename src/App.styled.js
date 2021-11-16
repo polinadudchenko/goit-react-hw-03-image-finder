@@ -7,4 +7,12 @@ const StyledApp = styled.div`
     padding-bottom: 24px;
 `;
 
-export {StyledApp}
+const StyledModalImg = styled.img`
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%
+    height: 100%
+`;
+
+export {StyledApp, StyledModalImg}

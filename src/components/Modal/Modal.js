@@ -25,9 +25,10 @@ class Modal extends Component {
     }
   }
 
-  handleClose = () => {
-    //I especially enable to close modal by click on Image
-    this.props.onClose()
+  handleClose = (e) => {
+    if (e.target === e.currentTarget) {
+      this.props.onClose()
+    }
   }
 
   render() {

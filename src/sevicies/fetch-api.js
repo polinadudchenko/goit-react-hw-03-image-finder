@@ -6,7 +6,6 @@ export default function fetchImage(query) {
         if (response.ok) {
             return response.json()
         }
-
         return Promise.reject(`No images with query ${query} found`)
     })
 }
