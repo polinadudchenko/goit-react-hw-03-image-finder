@@ -5,6 +5,7 @@ import fetchImage from '../../sevicies/fetch-api'
 import ImageGalleryItem from '../ImageGalleryItem'
 import { StyledGallery } from './ImageGallery.styled'
 import mapper from '../../sevicies/mapper'
+import Modal from '../Modal'
 
 
 const Status = {
@@ -17,12 +18,15 @@ const Status = {
 class ImageGallery extends Component {
   static propTypes = {
     query: PropTypes.string.isRequired,
+    onToggleModal: PropTypes.func.isRequired,
+    onOpenModal: PropTypes.func.isRequired,
   }
 
   state = {
     images: null,
     error: null,
     status: Status.IDLE,
+    showModal: false,
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -42,7 +46,13 @@ class ImageGallery extends Component {
     }
     
   }
-    
+  
+  handleModal = (e) => {
+    console.log('aaa');
+    this.props.onOpenModal(e.target.dataset.modal);
+    this.props.onToggleModal();
+  }
+
   render() {
     const { images, error, status } = this.state;
     
@@ -57,10 +67,10 @@ class ImageGallery extends Component {
     }
     if (status === "resolved") {
       return images && <StyledGallery>
-        <ImageGalleryItem images={images} />
+        <ImageGalleryItem images={images} onImgClick={ this.handleModal}/>
       </StyledGallery>
     }
-      
+    
   }
   
 }
