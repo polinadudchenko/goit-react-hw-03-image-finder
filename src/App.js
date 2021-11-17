@@ -36,6 +36,7 @@ class App extends Component {
     const prevPage = prevState.page;
     const nextPage = this.state.page;
     console.log(nextPage, this.state.images);
+    console.log(toast.error('oops'));
     if (prevQuery !== nextQuery) {
       this.setState({page: 1, images: []})
     }
@@ -78,16 +79,24 @@ class App extends Component {
     this.toggleModal();
   }
 
+  getInfoNote() {
+      toast.info('Please type a query in the search field')
+  }
+
+  getErrorNote(error) {
+      toast.error(error)
+  }
+
   render() {
     const { query, showModal, modalImg, images, error, status } = this.state;
     return <StyledApp>
       <Searchbar onSubmit={this.handleSubmit} />
-      {status === Status.IDLE && toast.info('Please type a query in the search field')}
+      {status === Status.IDLE && this.getInfoNote()}
       {status === Status.PENDING && <Loader />}
       {status === Status.RESOLVED &&
         <ImageGallery images={images} error={error} status={status} onHandleModal={this.handleModal} onHandleLoadBtn={this.handleLoadButton} />
       }
-      {status === Status.REJECTED && toast.error(error)}
+      {status === Status.REJECTED && this.getErrorNote(error)}
       {showModal && <Modal onClose={this.toggleModal}><StyledModalImg src={modalImg} alt={query} /></Modal>}
       <ToastContainer autoClose={3000}/>
     </StyledApp> 
