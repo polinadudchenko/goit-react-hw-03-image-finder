@@ -3,7 +3,7 @@ import { StyledButton } from './Button.styled';
 
 export default function Button({loadMoreImages}) {
     return <>
-            <StyledButton type='button' onClick={loadMoreImages}>Load more</StyledButton>
+            <StyledButton id='load-btn' type='button' onClick={loadMoreImages}>Load more</StyledButton>
         </>
 }
 

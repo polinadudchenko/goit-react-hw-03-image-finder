@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {StyledApp, StyledModalImg} from './App.styled';
 import ImageGallery from './components/ImageGallery';
 import Searchbar from './components/Searchbar';
@@ -33,7 +35,7 @@ class App extends Component {
       <Searchbar onSubmit={this.handleSubmit} />
       <ImageGallery query={query} onToggleModal={this.toggleModal} onOpenModal={this.openModal }/>
       {showModal && <Modal onClose={this.toggleModal}><StyledModalImg src={modalImg} alt={ query}/></Modal>}
-      
+      <ToastContainer autoClose={3000}/>
     </StyledApp>
   }
 }

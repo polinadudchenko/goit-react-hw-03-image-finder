@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { toast } from 'react-toastify';
+import React, { Component } from 'react';
 import Loader from '../Loader';
 import fetchImage from '../../sevicies/fetch-api';
 import ImageGalleryItem from '../ImageGalleryItem';
 import { StyledGallery } from './ImageGallery.styled';
 import mapper from '../../sevicies/mapper';
 import Button from '../Button';
-
 
 const Status = {
   IDLE: 'idle',
@@ -16,6 +16,12 @@ const Status = {
 };
 
 class ImageGallery extends Component {
+
+ /*  constructor(props) {
+    super(props);
+    this.imagesRef = React.createRef();
+  } */
+
   static propTypes = {
     query: PropTypes.string.isRequired,
     onToggleModal: PropTypes.func.isRequired,
@@ -30,13 +36,24 @@ class ImageGallery extends Component {
     showModal: false,
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  /* getSnapshotBeforeUpdate(prevProps, prevState) {
+
+    if (prevState.page < this.state.page) {
+        return window.scrollY;
+      }
+    return null;
+  }
+   */
+  componentDidUpdate(prevProps, prevState, snapshot) {
     const prevQuery = prevProps.query;
     const nextQuery = this.props.query;
 
     const prevPage = prevState.page;
     const nextPage = this.state.page;
 
+    if (prevQuery !== nextQuery) {
+      this.setState({page: 1})
+    }
     if (prevQuery !== nextQuery || prevPage !== nextPage) {
       this.setState({ status: Status.PENDING })
       fetchImage(nextQuery, this.state.page).then(response => {
@@ -48,6 +65,11 @@ class ImageGallery extends Component {
         this.setState({ error, status: Status.REJECTED })
       })
       
+    }
+
+    if (snapshot !== null) {
+      this.imgRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      //img.scrollTop = img.scrollHeight - snapshot;
     }
     
   }
@@ -68,7 +90,8 @@ class ImageGallery extends Component {
     const { images, error, status } = this.state;
     
     if (status === "idle") {
-      return <div>No photos loaded, please type a search query</div>
+      toast.info('Please type a query in the search field')
+      return null;
     }
 
     if (status === "pending") {
@@ -86,7 +109,8 @@ class ImageGallery extends Component {
     }
 
     if (status === "rejected") {
-      return <div>{error}</div>
+      toast.error(error);
+      return null;
     }
     
   }
