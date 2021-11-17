@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types'
-import { Component } from 'react'
-import Loader from '../Loader'
-import fetchImage from '../../sevicies/fetch-api'
-import ImageGalleryItem from '../ImageGalleryItem'
-import { StyledGallery } from './ImageGallery.styled'
-import mapper from '../../sevicies/mapper'
-import Modal from '../Modal'
+import PropTypes from 'prop-types';
+import { Component } from 'react';
+import Loader from '../Loader';
+import fetchImage from '../../sevicies/fetch-api';
+import ImageGalleryItem from '../ImageGalleryItem';
+import { StyledGallery } from './ImageGallery.styled';
+import mapper from '../../sevicies/mapper';
+import Button from '../Button';
 
 
 const Status = {
@@ -23,8 +23,9 @@ class ImageGallery extends Component {
   }
 
   state = {
-    images: null,
+    images: [],
     error: null,
+    page: 1,
     status: Status.IDLE,
     showModal: false,
   }
@@ -33,18 +34,28 @@ class ImageGallery extends Component {
     const prevQuery = prevProps.query;
     const nextQuery = this.props.query;
 
-    if (prevQuery !== nextQuery) {
+    const prevPage = prevState.page;
+    const nextPage = this.state.page;
+
+    if (prevQuery !== nextQuery || prevPage !== nextPage) {
       this.setState({ status: Status.PENDING })
-      fetchImage(nextQuery).then(response => {
-        const images = mapper(response.hits);
-        this.setState({images, status: Status.RESOLVED})
+      fetchImage(nextQuery, this.state.page).then(response => {
+        const newImages = mapper(response.hits);
+        this.setState(prevState => (
+          { images: [...prevState.images, ...newImages], status: Status.RESOLVED }
+        ))
       }).catch(error => {
         this.setState({ error, status: Status.REJECTED })
-        console.log(error)
       })
       
     }
     
+  }
+
+  handleLoadButton = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }))
   }
   
   handleModal = (e) => {
@@ -66,9 +77,16 @@ class ImageGallery extends Component {
     );
     }
     if (status === "resolved") {
-      return images && <StyledGallery>
-        <ImageGalleryItem images={images} onImgClick={ this.handleModal}/>
-      </StyledGallery>
+      return images && <>
+        <StyledGallery>
+          <ImageGalleryItem images={images} onImgClick={ this.handleModal}/>
+        </StyledGallery>
+        <Button loadMoreImages={ this.handleLoadButton}/>
+      </>
+    }
+
+    if (status === "rejected") {
+      return <div>{error}</div>
     }
     
   }

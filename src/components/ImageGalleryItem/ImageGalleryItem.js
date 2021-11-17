@@ -11,10 +11,11 @@ export default function ImageGalleryItem({ images, onImgClick }) {
 }
 
 ImageGalleryItem.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.shape({
+    images: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     galleryImg: PropTypes.string.isRequired,
     modalImg: PropTypes.string.isRequired,
     tags: PropTypes.string.isRequired,
-  })),
+    })),
+    onImgClick: PropTypes.func.isRequired,
 }
