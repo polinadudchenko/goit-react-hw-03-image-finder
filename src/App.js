@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import fetchImage from './sevicies/fetch-api';
+import fetchApi from './sevicies/fetch-api';
 import mapper from './sevicies/mapper';
 import {StyledApp, StyledModalImg} from './App.styled';
 import ImageGallery from './components/ImageGallery';
 import Searchbar from './components/Searchbar';
-import '../node_modules/react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import Modal from './components/Modal';
 import Loader from './components/Loader';
+import 'react-toastify/dist/ReactToastify.css';
+import '../node_modules/react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 const Status = {
   IDLE: 'idle',
@@ -29,21 +29,23 @@ class App extends Component {
     status: Status.IDLE,
   }
 
+  
   componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevState.query;
     const nextQuery = this.state.query;
 
     const prevPage = prevState.page;
     const nextPage = this.state.page;
-    console.log(nextPage, this.state.images);
-    console.log(toast.error('oops'));
-    if (prevQuery !== nextQuery) {
-      this.setState({page: 1, images: []})
-    }
+    
     if (prevQuery !== nextQuery || prevPage !== nextPage) {
-      console.log(nextPage, this.state.images);
       this.setState({ status: Status.PENDING })
-      fetchImage(nextQuery, nextPage).then(response => {
+      this.fetchImage();
+    }    
+  }
+
+  fetchImage = () => {
+    const { query, page } = this.state;
+      fetchApi(query, page).then(response => {
         const newImages = mapper(response.hits);
         this.setState(prevState => (
           { images: [...prevState.images, ...newImages], status: Status.RESOLVED }
@@ -51,11 +53,10 @@ class App extends Component {
       }).catch(error => {
         this.setState({ error, status: Status.REJECTED })
       })
-    }    
   }
 
   handleSubmit = (query) => {
-    this.setState({query})
+    this.setState({query, page: 1, images: []})
   }
 
   toggleModal = () => {
