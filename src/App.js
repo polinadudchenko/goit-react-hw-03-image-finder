@@ -29,11 +29,7 @@ class App extends Component {
     status: Status.IDLE,
   }
 
-  getSnapshotBeforeUpdate() {
-    return window.scrollY;
-  }
-  
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevState.query;
     const nextQuery = this.state.query;
     
