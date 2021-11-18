@@ -52,6 +52,7 @@ class App extends Component {
         ))
       }).catch(error => {
         this.setState({ error, status: Status.REJECTED })
+        toast.error(error)
       })
   }
 
@@ -92,12 +93,10 @@ class App extends Component {
     const { query, showModal, modalImg, images, error, status } = this.state;
     return <StyledApp>
       <Searchbar onSubmit={this.handleSubmit} />
-      {status === Status.IDLE && this.getInfoNote()}
       {status === Status.PENDING && <Loader />}
       {status === Status.RESOLVED &&
         <ImageGallery images={images} error={error} status={status} onHandleModal={this.handleModal} onHandleLoadBtn={this.handleLoadButton} />
       }
-      {status === Status.REJECTED && this.getErrorNote(error)}
       {showModal && <Modal onClose={this.toggleModal}><StyledModalImg src={modalImg} alt={query} /></Modal>}
       <ToastContainer autoClose={3000}/>
     </StyledApp> 
