@@ -29,15 +29,19 @@ class App extends Component {
     status: Status.IDLE,
   }
 
+  getSnapshotBeforeUpdate() {
+    return window.scrollY;
+  }
   
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     const prevQuery = prevState.query;
     const nextQuery = this.state.query;
 
     const prevPage = prevState.page;
     const nextPage = this.state.page;
-    
-    if (prevQuery !== nextQuery || prevPage !== nextPage) {
+    console.log(snapshot);
+    if (prevQuery !== nextQuery) {
+      console.log('i am here');
       this.setState({ status: Status.PENDING })
       this.fetchImage();
     }    
@@ -45,15 +49,20 @@ class App extends Component {
 
   fetchImage = () => {
     const { query, page } = this.state;
-      fetchApi(query, page).then(response => {
+
+    fetchApi(query, page).then(response => {
         const newImages = mapper(response.hits);
         this.setState(prevState => (
-          { images: [...prevState.images, ...newImages], status: Status.RESOLVED }
+          { images: [...prevState.images, ...newImages], status: Status.RESOLVED, page: prevState.page + 1,}
         ))
-      }).catch(error => {
+        window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+    });
+    }).then(() => console.log(this.state.images)).catch(error => {
         this.setState({ error, status: Status.REJECTED })
         toast.error(error)
-      })
+    })
   }
 
   handleSubmit = (query) => {
@@ -71,9 +80,10 @@ class App extends Component {
   }
 
   handleLoadButton = () => {
-    this.setState(prevState => ({
+    /* this.setState(prevState => ({
       page: prevState.page + 1,
-    }))
+    })) */
+    this.fetchImage()
   }
   
   handleModal = (e) => {
@@ -104,3 +114,32 @@ class App extends Component {
 }
 
 export default App;
+
+
+/* fetchImg = () => {
+        const { currentPage, searchQuery } = this.state;
+        const options = { searchQuery, currentPage };
+
+        if (!searchQuery) {
+            return;
+        }
+
+        this.setState({ isLoading: true });
+
+        ImageApi.fetchImg(options)
+            .then(hits => {
+                this.setState(prevState => ({
+                    images: [...prevState.images, ...hits],
+                    currentPage: prevState.currentPage + 1,
+                }));
+
+                window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth',
+                });
+            })
+            .catch(error => this.setState({ error }))
+            .finally(() => {
+                this.setState({ isLoading: false });
+            });
+    }; */

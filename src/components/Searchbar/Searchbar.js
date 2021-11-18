@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import { Component } from 'react'
+import { toast } from 'react-toastify';
 import {StyledSearchbar, StyledSearchForm, StyledSearchBtn, StyledSearchBtnLabel, StyledSearchInput} from './Searchbar.styled'
 
 class Searchbar extends Component {
@@ -20,8 +21,8 @@ class Searchbar extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     const { input } = this.state;
-    if (input.trim() === 0) {
-      alert('type a query')
+    if (input.trim() === '') {
+      toast.info('Please type a query')
       return
     }
 
