@@ -80,14 +80,6 @@ class App extends Component {
     this.toggleModal();
   }
 
-  getInfoNote() {
-      toast.info('Please type a query in the search field')
-  }
-
-  getErrorNote(error) {
-      toast.error(error)
-  }
-
   render() {
     const { query, showModal, modalImg, images, error, status } = this.state;
     return <StyledApp>
@@ -104,31 +96,3 @@ class App extends Component {
 
 export default App;
 
-
-/* fetchImg = () => {
-        const { currentPage, searchQuery } = this.state;
-        const options = { searchQuery, currentPage };
-
-        if (!searchQuery) {
-            return;
-        }
-
-        this.setState({ isLoading: true });
-
-        ImageApi.fetchImg(options)
-            .then(hits => {
-                this.setState(prevState => ({
-                    images: [...prevState.images, ...hits],
-                    currentPage: prevState.currentPage + 1,
-                }));
-
-                window.scrollTo({
-                    top: document.documentElement.scrollHeight,
-                    behavior: 'smooth',
-                });
-            })
-            .catch(error => this.setState({ error }))
-            .finally(() => {
-                this.setState({ isLoading: false });
-            });
-    }; */
