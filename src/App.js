@@ -36,12 +36,8 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     const prevQuery = prevState.query;
     const nextQuery = this.state.query;
-
-    const prevPage = prevState.page;
-    const nextPage = this.state.page;
-    console.log(snapshot);
+    
     if (prevQuery !== nextQuery) {
-      console.log('i am here');
       this.setState({ status: Status.PENDING })
       this.fetchImage();
     }    
@@ -59,7 +55,7 @@ class App extends Component {
         top: document.documentElement.scrollHeight,
         behavior: 'smooth',
     });
-    }).then(() => console.log(this.state.images)).catch(error => {
+    }).catch(error => {
         this.setState({ error, status: Status.REJECTED })
         toast.error(error)
     })
@@ -80,9 +76,6 @@ class App extends Component {
   }
 
   handleLoadButton = () => {
-    /* this.setState(prevState => ({
-      page: prevState.page + 1,
-    })) */
     this.fetchImage()
   }
   
